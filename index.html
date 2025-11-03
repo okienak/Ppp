@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKIENAK Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style id="custom-styles">
+        /* Variabel Warna Dasar (Deep Purple) */
+        :root {
+            --p: #673AB7; /* Primary / Deep Purple */
+            --l: #EDE7F6; /* Light Purple/Lavender */
+            --b: #FFFFFF; /* Background Putih Bersih */
+            --t: #4527A0; /* Text Darker Purple */
+            --e: #E53935; /* Error Red */
+            --s: #4CAF50; /* Success Green */
+            --sh: rgba(103, 58, 183, 0.2); /* Subtle Shadow dari Primary */
+            
+            /* Custom Font Defaults */
+            --c-ff: 'Inter', sans-serif; 
+            --c-fs: 1.0rem;
+            --c-fw: 400; 
+            --c-fc: var(--t);
+            
+            /* Toast Colors */
+            --toast-success: #4CAF50;
+            --toast-error: #E53935;
+            --toast-info: #2196F3;
+        }
+
+        /* Reset dan Dasar */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--c-ff);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.5, 1); 
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--l); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            color: var(--t);
+        }
+        
+        /* Main Container - Fluid dan Tidak Kaku */
+        .main-container {
+            width: 90%; 
+            max-width: 650px; 
+            background: var(--b);
+            border-radius: 15px; 
+            padding: 40px; 
+            box-shadow: 0 15px 30px var(--sh); 
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .main-container#hC {
+            text-align: center;
+            min-height: 350px;
+            justify-content: center;
+        }
+
+        a {
+            color: var(--p);
+            text-decoration: none;
+            font-weight: 500; 
+        }
+        
+        h1 {
+            font-weight: 700;
+            color: var(--t);
+        }
+        
+        /* Input, Textarea, dan Select Style */
+        input:not([type="radio"]):not([type="checkbox"]):not([type="color"]), textarea, select {
+            width: 100%;
+            border-radius: 10px; 
+            border: 1px solid #DCE1E7;
+            padding: 1rem 1.2rem; 
+            margin-bottom: 1.5rem; 
+            font-size: 1rem;
+            font-weight: 400;
+            background: #F8F9FA;
+            color: var(--t);
+        }
+        
+        input:focus:not([type="radio"]):not([type="checkbox"]):not([type="color"]), textarea:focus, select:focus {
+            border-color: var(--p);
+            box-shadow: 0 0 0 4px rgba(103, 58, 183, 0.2); 
+            background: var(--b);
+        }
+        
+        #newOKIENAKForm .form-row {
+            display: flex;
+            gap: 20px; 
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap; 
+        }
+        
+        #newOKIENAKForm .form-row > * {
+            flex: 1;
+            min-width: 180px; 
+        }
+
+        /* Pill Button Style - Bulat Penuh */
+        .pill-button {
+            background: var(--p);
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            border-radius: 50px; 
+            padding: 1rem 2.2rem; 
+            box-shadow: 0 8px 15px var(--sh); 
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pill-button:hover {
+            background: #5E35B1; 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 20px var(--sh);
+        }
+        
+        .pill-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Card & Action Styles */
+        .note-card {
+            background: var(--b);
+            border: 1px solid #EAECEE; 
+            border-left: 8px solid var(--p); 
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .na {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .na .pill-button {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            border-radius: 50px; 
+            box-shadow: none;
+            text-transform: uppercase;
+        }
+        .btn-save-edit {
+             background: var(--s) !important;
+        }
+        
+        /* Status Tags - Pill Shape */
+        .status-tag {
+             background: var(--l); 
+             color: var(--t); 
+             padding: 4px 12px; 
+             border-radius: 50px; 
+             margin-right: 10px; 
+             font-size: 0.8rem;
+             font-weight: 500;
+             text-transform: uppercase;
+        }
+
+        /* --- TOAST NOTIFICATION STYLES (IMPROVED) --- */
+        #tc {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 250px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: #fff;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast:before {
+            content: '';
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        .toast.success { background: var(--toast-success); }
+        .toast.success:before { content: '✓'; }
+        .toast.error { background: var(--toast-error); }
+        .toast.error:before { content: '✕'; }
+        .toast.info { background: var(--toast-info); }
+        .toast.info:before { content: 'i'; }
+        /* --- END TOAST STYLES --- */
+
+        /* General Utility/Component Styles retained from V5.2 */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .password-toggle { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; font-size: 0.8rem; z-index: 10; color: var(--p); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; background: var(--l); padding: 5px 10px; border-radius: 50px; }
+        .icon-btn { background: var(--l); color: var(--p); border: none; padding: 10px 18px; border-radius: 50px; cursor: pointer; font-size: 1rem; line-height: 1; font-weight: 600; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .icon-btn:hover { transform: scale(1.03); background: var(--p); color: #fff; }
+        .code-block { background: #2D3E50; color: #ECF0F1; padding: 18px; border-radius: 10px; overflow-x: auto; font-family: 'monospace'; white-space: pre-wrap; word-wrap: break-word; margin: 15px 0; font-size: var(--c-fs); line-height: 1.5; }
+        .toggle-section { width: 100%; border: 1px solid #D1C4E9; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; cursor: pointer; background: var(--b); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .toggle-section h4 { margin: 0; color: var(--t); display: flex; justify-content: space-between; align-items: center; font-weight: 600; letter-spacing: 0.5px; }
+        .toggle-content { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #F3E5F5; }
+        .toggle-icon { font-size: 1.2rem; color: var(--p); font-weight: 700; line-height: 1; }
+        .tab { display: flex; margin-bottom: 2.5rem; border-bottom: 2px solid #D1C4E9; padding: 0; width: 100%; max-width: 350px; }
+        .tab button { flex: 1; background: transparent; color: var(--t); border: none; padding: .8rem 0; font-weight: 500; border-bottom: 2px solid transparent; margin: 0; }
+        .active-tab { font-weight: 600 !important; color: var(--p) !important; border-bottom: 3px solid var(--p) !important; background: transparent !important; }
+        .btn-delete { background: var(--e) !important; }
+        .btn-delete-admin { background: #D32F2F !important; }
+        footer { margin-top: auto; padding: 25px 20px 25px; text-align: center; color: #9575CD; font-size: .85rem; width: 100%; font-weight: 500; }
+        footer a { color: #9575CD; border-bottom: 1px dotted #9575CD; font-weight: 500; }
+    </style>
+</head>
+<body>
+    
+    <div class="main-container hidden" id="hC">
+        <h1 style="font-size: 3rem; color: var(--p); margin-bottom: 15px; letter-spacing: 1px;">OKIENAK</h1>
+        <p style="font-size: 1.1rem; color: #777; margin-bottom: 40px; font-weight: 300;">Secure, time-bound content sharing platform.</p>
+        <button id="jB" class="pill-button" style="padding: 15px 45px; font-size: 1.1rem;">ACCESS ACCOUNT</button>
+    </div>
+
+    <div class="main-container hidden" id="aC">
+        <h1 style="color:var(--t); font-size: 2rem; margin-bottom: 0;">Secure <span style="color:var(--p);">Access</span></h1>
+        <p style="margin-bottom: 2.5rem; font-size: 0.9rem; color: #777; font-weight: 300;">Login or create an account.</p>
+        
+        <div class="tab" style="max-width:350px;">
+            <button id="lT" class="active-tab">Sign In</button>
+            <button id="rT">Sign Up</button>
+        </div>
+
+        <div id="lF" style="width:100%;">
+            <input id="lE" type="email" placeholder="Email Address">
+            <div style="position:relative; margin-bottom:1.5rem;">
+                <input id="lP" type="password" placeholder="Password" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="lPTog">SHOW</span>
+            </div>
+            <button id="lB" class="pill-button" style="width:100%;">LOGIN</button>
+        </div>
+
+        <div id="rF" class="hidden" style="width:100%;">
+            <input id="rE" type="email" placeholder="Email Address">
+            <div style="position:relative; margin-bottom:1rem;">
+                <input id="rP" type="password" placeholder="Password (Min. 3 chars)" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="rPTog">SHOW</span>
+            </div>
+            <div style="position:relative; margin-bottom:1.5rem;">
+                <input id="rCP" type="password" placeholder="Confirm Password" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="rCPTog">SHOW</span>
+            </div>
+            <button id="rB" class="pill-button" style="width:100%;">REGISTER</button>
+        </div>
+    </div>
+
+    <div class="main-container hidden" id="nC">
+        <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem;">
+             <h1 style="font-size:1.8rem; color:var(--t);">Welcome, <span style="color:var(--p);" id="uN"></span></h1>
+             <div style="display:flex; gap:12px;">
+                 <button id="sTog" class="icon-btn" title="Settings">SETTINGS</button>
+                 <button id="lB2" class="icon-btn" style="background:var(--e); color:#fff;" title="Logout">LOGOUT ➜</button>
+             </div>
+        </div>
+        
+        <div id="adminView" class="hidden" style="width:100%; margin-bottom: 2rem;">
+            <div class="toggle-section" id="adminToggle">
+                <h4>ADMIN CONTROL PANEL <span id="adminToggleIcon" class="toggle-icon">+</span></h4>
+                <div id="adminContent" class="toggle-content hidden">
+                    <h5 style="color:var(--e); margin-bottom: 10px;">ALL SERVER NOTES (Total: <span id="totalNotesCount">0</span>)</h5>
+                    <div id="allNotesList">
+                        </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="settingsSection" class="hidden" style="width:100%;">
+            <div class="toggle-section" id="styleToggle">
+                <h4>VISUAL SETTINGS <span id="styleToggleIcon" class="toggle-icon">+</span></h4>
+                <div id="styleContent" class="toggle-content hidden">
+                    <h5 style="color:var(--p); margin-bottom:1.5rem; text-align:center; font-weight: 500;">Customize Your Display Style</h5>
+                    
+                    <div class="form-row">
+                        <div style="flex:1; min-width:200px;">
+                             <label style="font-weight:500; font-size: 0.9rem;">Theme Color (Primary):</label>
+                             <input type="color" id="cC" value="#673AB7" style="width:100%; height:40px; padding:5px; margin:0; border-radius: 5px;">
+                        </div>
+                        <div style="flex:1; min-width:200px;">
+                             <label style="font-weight:500; font-size: 0.9rem;">Font Color (Text):</label>
+                             <input type="color" id="cSC" value="#4527A0" style="width:100%; height:40px; padding:5px; margin:0; border-radius: 5px;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="font-weight:500; font-size: 0.9rem;">Font Family:</label>
+                        <select id="cF" style="margin-bottom:0;">
+                            <option value="Inter, sans-serif">Inter (Sleek)</option>
+                            <option value="Montserrat, sans-serif">Montserrat (Modern)</option>
+                            <option value="Roboto, sans-serif">Roboto (Standard)</option>
+                            <option value="monospace">Monospace (Code)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div style="flex:1;">
+                            <label style="font-weight:500; font-size: 0.9rem;">Size (px):</label>
+                            <input type="number" id="cSZ" value="16" min="10" max="30" style="margin:0;">
+                        </div>
+                        <div style="flex:1;">
+                            <label style="font-weight:500; font-size: 0.9rem;">Weight:</label>
+                            <select id="cSW" style="margin:0;">
+                                <option value="400">Regular</option>
+                                <option value="500">Medium</option>
+                                <option value="600">Semi-Bold</option>
+                                <option value="700">Bold</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="sCSB" class="pill-button" style="width:100%; margin-top:10px; background: #3F51B5;">SAVE SETTINGS</button>
+            <hr style="border:0; border-top:1px solid #ECEFF1; margin:30px 0;">
+        </div>
+        
+        <div id="newOKIENAKForm" style="width:100%;">
+            <h2 id="formTitle" style="font-size:1.5rem; margin-bottom:2rem; color:var(--p); border-bottom:1px solid #ECEFF1; padding-bottom:10px;">Create New OKIENAK</h2>
+            
+            <input id="pT" type="text" placeholder="Optional OKIENAK Title (e.g., Project Credentials)">
+            
+            <div class="form-row">
+                <select id="sH" style="flex:1;">
+                    <option value="text">Content Type: Plain Text</option>
+                    <option value="code">Content Type: Code/Syntax</option>
+                    <option value="link">Content Type: Hyperlink</option>
+                </select>
+                <select id="eO" style="flex:1;">
+                    <option value="never">Expiry: No Limit (∞)</option>
+                    <option value="1h">Expiry: 1 Hour</option>
+                    <option value="1d">Expiry: 1 Day</option>
+                    <option value="1w">Expiry: 1 Week</option>
+                    <option value="1m">Expiry: 1 Month</option>
+                    <option value="1y">Expiry: 1 Year (Max)</option>
+                </select>
+            </div>
+            
+            <textarea id="nI" placeholder="Type your secure content here..." style="min-height: 180px;"></textarea>
+            
+            <div style="position:relative;">
+                <input id="nPI" type="password" placeholder="Optional Password Protection" style="padding-right: 6rem; margin-bottom:0;">
+                <span class="password-toggle" id="nPITog">SHOW</span>
+            </div>
+        </div>
+        
+        <button id="aNB" class="pill-button" style="width:100%; margin-top:30px;">PUBLISH OKIENAK</button>
+        <button id="sE" class="pill-button btn-save-edit hidden" style="width:100%; margin-top:30px;">SAVE CHANGES</button>
+        <button id="cB" class="pill-button hidden" style="width:100%; margin-top:15px; background: #9E9E9E;">CANCEL EDIT</button>
+
+
+        <div id="nL" style="margin-top:4rem; width:100%;">
+            <h2 style="font-size:1.5rem; margin-bottom:2rem; color:var(--p); border-bottom:1px solid #ECEFF1; padding-bottom:10px;">My OKIENAKs</h2>
+            </div>
+
+    </div>
+
+    <div id="tc"></div>
+
+    <footer>
+        &copy; 2026 OKIENAK | Owner: <a href="mailto:cidmomo19@gmail.com">cidmomo19@gmail.com</a>
+    </footer>
+
+    <script>
+        // Mapping DOM Elements
+        const D = {
+            // General
+            hC: document.getElementById("hC"),
+            aC: document.getElementById("aC"),
+            nC: document.getElementById("nC"),
+            jB: document.getElementById("jB"),
+            tC: document.getElementById("tc"),
+            sTog: document.getElementById("sTog"), 
+            lB2: document.getElementById("lB2"),
+            settingsSection: document.getElementById("settingsSection"),
+            // ... (Other settings elements retained)
+            // Auth
+            lT: document.getElementById("lT"),
+            rT: document.getElementById("rT"),
+            lE: document.getElementById("lE"),
+            lP: document.getElementById("lP"),
+            lPTog: document.getElementById("lPTog"),
+            lB: document.getElementById("lB"),
+            rE: document.getElementById("rE"),
+            rP: document.getElementById("rP"),
+            rPTog: document.getElementById("rPTog"),
+            rCP: document.getElementById("rCP"),
+            rCPTog: document.getElementById("rCPTog"),
+            rB: document.getElementById("rB"),
+            lF: document.getElementById("lF"),
+            rF: document.getElementById("rF"),
+            // OKIENAK Input & Dashboard
+            uN: document.getElementById("uN"),
+            pT: document.getElementById("pT"), 
+            sH: document.getElementById("sH"),
+            eO: document.getElementById("eO"),
+            nI: document.getElementById("nI"),
+            nPI: document.getElementById("nPI"),
+            nPITog: document.getElementById("nPITog"),
+            aNB: document.getElementById("aNB"), // Add New Button
+            sE: document.getElementById("sE"),   // Save Edit Button (NEW)
+            cB: document.getElementById("cB"),   // Cancel Edit Button (NEW)
+            formTitle: document.getElementById("formTitle"), // Form Title (NEW)
+            nL: document.getElementById("nL"),
+            // Custom Style
+            cC: document.getElementById("cC"), 
+            cF: document.getElementById("cF"), 
+            cSZ: document.getElementById("cSZ"), 
+            cSW: document.getElementById("cSW"), 
+            cSC: document.getElementById("cSC"), 
+            // Admin View
+            adminView: document.getElementById("adminView"),
+            adminToggle: document.getElementById("adminToggle"),
+            adminContent: document.getElementById("adminContent"),
+            adminToggleIcon: document.getElementById("adminToggleIcon"),
+            allNotesList: document.getElementById("allNotesList"),
+            totalNotesCount: document.getElementById("totalNotesCount"),
+        };
+
+        // Global State for Editing
+        let currentEditIndex = null; // Menyimpan index dari OKIENAK yang sedang diedit
+
+        // --- GLOBAL UTILITIES ---
+        
+        // Local Storage Utilities
+        const gU = () => JSON.parse(localStorage.getItem("users") || "{}");
+        const sU = u => localStorage.setItem("users", JSON.stringify(u));
+        const gLUE = () => localStorage.getItem("loggedIn");
+        const oE = "cidmomo19@gmail.com"; 
+
+        // Link Formatter
+        const lk = t => {
+            const p = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return t.replace(p, '<a href="$1" target="_blank" style="color:var(--p); font-weight:600;">$1</a>');
+        }
+        
+        // Expiry Calculator
+        const gE = (o) => {
+            const n = new Date();
+            if (o === '1h') n.setHours(n.getHours() + 1);
+            else if (o === '1d') n.setDate(n.getDate() + 1);
+            else if (o === '1w') n.setDate(n.getDate() + 7);
+            else if (o === '1m') n.setMonth(n.getMonth() + 1);
+            else if (o === '1y') n.setFullYear(n.getFullYear() + 1);
+            else return null; 
+            return n.getTime();
+        };
+
+        // Reverse Expiry (Mencari Opsi berdasarkan waktu)
+        const gRE = (expiryTime) => {
+            if (!expiryTime) return 'never';
+            
+            const diff = expiryTime - Date.now(); 
+            const hour = 60 * 60 * 1000;
+            const day = 24 * hour;
+            const week = 7 * day;
+            const month = 30 * day; 
+            const year = 365 * day;
+
+            if (Math.abs(diff - hour) < day/2) return '1h'; // Cek apakah dekat 1 jam
+            if (Math.abs(diff - day) < hour) return '1d';
+            if (Math.abs(diff - week) < day) return '1w';
+            if (Math.abs(diff - month) < week) return '1m';
+            if (Math.abs(diff - year) < month) return '1y';
+            
+            return 'never';
+        };
+        
+        // Toast Notification Function (IMPROVED)
+        function sT(m, t = 'info') {
+            const o = document.createElement('div');
+            o.className = `toast ${t}`;
+            o.textContent = m;
+            
+            // Hapus notifikasi lama jika sudah terlalu banyak (max 3)
+            const existingToasts = D.tC.querySelectorAll('.toast');
+            if (existingToasts.length >= 3) {
+                 existingToasts[0].remove();
+            }
+
+            D.tC.appendChild(o);
+            setTimeout(() => o.classList.add('show'), 10);
+            setTimeout(() => {
+                o.classList.remove('show');
+                o.addEventListener('transitionend', () => o.remove(), { once: true });
+            }, 4000);
+        }
+        
+        // Function to toggle password visibility 
+        function tPV(input, toggle) {
+            const isP = input.type === 'password';
+            input.type = isP ? 'text' : 'password';
+            toggle.textContent = isP ? 'HIDE' : 'SHOW'; 
+        }
+
+        // Apply Custom Theme Color
+        function aCTC(color) {
+            const root = document.documentElement;
+            const hexToRgb = (hex) => {
+                const bigint = parseInt(hex.slice(1), 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return [r, g, b];
+            };
+            const [r, g, b] = hexToRgb(color);
+            const lr = Math.round(255 * 0.9 + r * 0.1);
+            const lg = Math.round(255 * 0.9 + g * 0.1);
+            const lb = Math.round(255 * 0.9 + b * 0.1);
+            const lightColor = `rgb(${lr}, ${lg}, ${lb})`;
+            
+            root.style.setProperty('--p', color);
+            root.style.setProperty('--l', lightColor);
+        }
+
+        // --- PAGE NAVIGATION & AUTH LOGIC ---
+
+        function sHP() {
+            D.nC.classList.add("hidden");
+            D.aC.classList.add("hidden");
+            D.hC.classList.remove("hidden");
+        }
+
+        D.jB.addEventListener("click", () => {
+            D.hC.classList.add("hidden");
+            D.aC.classList.remove("hidden");
+            l(); 
+        });
+
+        function sNP(e) {
+            D.hC.classList.add("hidden");
+            D.aC.classList.add("hidden");
+            D.nC.classList.remove("hidden");
+            D.nC.classList.add("main-container"); 
+            D.uN.textContent = e.split('@')[0];
+            
+            if (e === oE) {
+                D.adminView.classList.remove("hidden");
+            } else {
+                D.adminView.classList.add("hidden");
+            }
+            
+            D.settingsSection.classList.add("hidden");
+            
+            lCS(e); 
+            rN(); 
+            if (e === oE) rAN();
+            resetFormState(); // Pastikan form dalam mode CREATE saat masuk
+        }
+        
+        // Settings/Admin Toggle Logic (Kode dipertahankan)
+
+        D.sTog.addEventListener("click", () => {
+            D.settingsSection.classList.toggle("hidden");
+        });
+        
+        function toggleContent(content, icon) {
+            const isHidden = content.classList.toggle('hidden');
+            icon.textContent = isHidden ? '+' : '-';
+        }
+
+        D.styleToggle.addEventListener('click', (e) => {
+            if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
+                toggleContent(D.styleContent, D.styleToggleIcon);
+            }
+        });
+        
+        D.adminToggle.addEventListener('click', (e) => {
+            if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                toggleContent(D.adminContent, D.adminToggleIcon);
+            }
+        });
+
+
+        // Tab Switching Logic (Kode dipertahankan)
+        const l = () => {
+            D.lT.classList.add("active-tab");
+            D.rT.classList.remove("active-tab");
+            D.lF.classList.remove("hidden");
+            D.rF.classList.add("hidden");
+        };
+        const r = () => {
+            D.rT.classList.add("active-tab");
+            D.lT.classList.remove("active-tab");
+            D.rF.classList.remove("hidden");
+            D.lF.classList.add("hidden");
+        };
+        D.lT.addEventListener("click", l);
+        D.rT.addEventListener("click", r);
+        
+        // Password Toggles Setup
+        D.lPTog.addEventListener('click', () => tPV(D.lP, D.lPTog));
+        D.rPTog.addEventListener('click', () => tPV(D.rP, D.rPTog));
+        D.rCPTog.addEventListener('click', () => tPV(D.rCP, D.rCPTog));
+        D.nPITog.addEventListener('click', () => tPV(D.nPI, D.nPITog));
+
+        // Register (Kode dipertahankan)
+        D.rB.addEventListener("click", () => {
+            const e = D.rE.value.trim();
+            const p = D.rP.value.trim();
+            const cP = D.rCP.value.trim();
+            if (!e || !p || !cP) return sT("Please fill in all fields!", 'error');
+            if (p.length < 3 || p !== cP) return sT("Password min 3 chars and must match!", 'error');
+
+            let u = gU();
+            if (u[e]) return sT("Email already registered!", 'error');
+
+            u[e] = { 
+                password: p, 
+                pastes: [], 
+                style: { 
+                    color: D.cC.value,
+                    fontFamily: D.cF.value,
+                    fontSize: D.cSZ.value,
+                    fontWeight: D.cSW.value,
+                    fontColor: D.cSC.value
+                },
+                visits: 0 
+            };
+            sU(u);
+            sT("Registration successful! Please login.", 'success');
+            D.rE.value = D.rP.value = D.rCP.value = "";
+            l(); 
+        });
+
+        // Login (Kode dipertahankan)
+        D.lB.addEventListener("click", () => {
+            const e = D.lE.value.trim();
+            const p = D.lP.value.trim();
+            let u = gU();
+
+            if (u[e] && u[e].password === p) {
+                localStorage.setItem("loggedIn", e);
+                sT(`Welcome back, ${e.split('@')[0]}!`, 'success');
+                sNP(e); 
+            } else {
+                sT("Incorrect email or password!", 'error');
+            }
+        });
+
+        // Logout (Kode dipertahankan)
+        D.lB2.addEventListener("click", () => {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                location.reload();
+            }
+        });
+        
+        // Custom Style Logic (Kode dipertahankan)
+        function lCS(email) {
+            const u = gU();
+            const style = u[email]?.style; 
+
+            if (style) {
+                aCTC(style.color);
+                document.documentElement.style.setProperty('--c-ff', style.fontFamily);
+                document.documentElement.style.setProperty('--c-fs', `${style.fontSize}px`);
+                document.documentElement.style.setProperty('--c-fw', style.fontWeight);
+                document.documentElement.style.setProperty('--c-fc', style.fontColor);
+                
+                D.cC.value = style.color;
+                D.cF.value = style.fontFamily;
+                D.cSZ.value = style.fontSize;
+                D.cSW.value = style.fontWeight;
+                D.cSC.value = style.fontColor;
+            }
+        }
+        
+        D.sCSB.addEventListener('click', () => {
+            const e = gLUE();
+            if (!e) return;
+            let u = gU();
+            
+            u[e].style = {
+                color: D.cC.value,
+                fontFamily: D.cF.value,
+                fontSize: D.cSZ.value,
+                fontWeight: D.cSW.value,
+                fontColor: D.cSC.value
+            };
+            sU(u);
+            lCS(e); 
+            rN(); 
+            sT("Settings saved successfully!", 'success');
+        });
+        
+        // --- FORM STATE MANAGEMENT ---
+        
+        // Reset Form ke mode "CREATE"
+        function resetFormState() {
+            currentEditIndex = null;
+            D.formTitle.textContent = "Create New OKIENAK";
+            D.aNB.classList.remove("hidden");
+            D.sE.classList.add("hidden");
+            D.cB.classList.add("hidden");
+
+            D.nI.value = D.pT.value = D.nPI.value = "";
+            D.sH.value = "text";
+            D.eO.value = "never";
+            D.nPI.type = "password"; 
+            D.nPITog.textContent = "SHOW";
+        }
+
+        D.cB.addEventListener('click', resetFormState);
+
+        // --- OKIENAK ACTIONS (CRUD) ---
+
+        // NEW: Load OKIENAK to form for editing
+        function uN(i) {
+            const e = gLUE();
+            let u = gU();
+            const nO = u[e].pastes[i];
+            
+            // Set Global State
+            currentEditIndex = i;
+
+            // Isi Form
+            D.formTitle.textContent = `Editing: ${nO.title}`;
+            D.pT.value = nO.title;
+            D.sH.value = nO.syntax;
+            D.nI.value = nO.content;
+            
+            // Set Expiry Option
+            D.eO.value = gRE(nO.expiry);
+            
+            // Handle Password (Jangan muat password ke field, biarkan kosong untuk diisi ulang)
+            D.nPI.value = ""; 
+            D.nPI.type = "password";
+            D.nPITog.textContent = "SHOW";
+
+            // Tampilkan tombol Edit, Sembunyikan tombol Create
+            D.aNB.classList.add("hidden");
+            D.sE.classList.remove("hidden");
+            D.cB.classList.remove("hidden");
+
+            sT(`OKIENAK '${nO.title}' loaded for editing.`, 'info');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // NEW: Save Edited OKIENAK
+        D.sE.addEventListener("click", () => {
+            if (currentEditIndex === null) return;
+            
+            const t = D.nI.value.trim();
+            if (!t) return sT("Content cannot be empty!", 'error');
+            
+            const e = gLUE();
+            let u = gU();
+            let nO = u[e].pastes[currentEditIndex];
+            
+            // Update fields
+            nO.title = D.pT.value.trim() || "Untitled OKIENAK";
+            nO.content = t;
+            nO.syntax = D.sH.value;
+            nO.expiry = gE(D.eO.value);
+            
+            // Update Password: Hanya update jika user mengisi field password
+            const newPassword = D.nPI.value.trim();
+            if (newPassword) {
+                nO.password = newPassword;
+            } 
+            // Jika user mengosongkan field saat edit, biarkan password lama tetap ada.
+            // Jika ingin fitur hapus password, perlu tombol/checkbox terpisah.
+
+            sU(u);
+            sT(`OKIENAK '${nO.title}' updated successfully!`, 'success');
+            
+            resetFormState();
+            rN();
+        });
+
+
+        // Original: Add New OKIENAK (Modified to check currentEditIndex)
+        D.aNB.addEventListener("click", () => {
+            if (currentEditIndex !== null) return; // Mencegah CREATE saat mode EDIT aktif
+            
+            const t = D.nI.value.trim();
+            const title = D.pT.value.trim() || "Untitled OKIENAK";
+            const nP = D.nPI.value.trim();
+            const sH = D.sH.value;
+            const eO = D.eO.value;
+            
+            if (!t) return sT("Please type content first!", 'error');
+
+            const e = gLUE();
+            let u = gU();
+            
+            const newOKIENAK = { 
+                title: title,
+                content: t, 
+                password: nP || null,
+                syntax: sH,
+                expiry: gE(eO),
+                visits: 0,
+                createdAt: Date.now()
+            };
+            
+            if (!u[e].pastes) u[e].pastes = [];
+            
+            u[e].pastes.unshift(newOKIENAK);
+            sU(u);
+            
+            D.nI.value = D.pT.value = D.nPI.value = "";
+            D.sH.value = "text";
+            D.eO.value = "never";
+
+            rN();
+            sT("OKIENAK Published!", 'success');
+        });
+
+        // Delete OKIENAK (User)
+        function dN(i) {
+            if (!confirm("Are you sure you want to delete this OKIENAK?")) return;
+            const e = gLUE();
+            let u = gU();
+            u[e].pastes.splice(i, 1);
+            sU(u);
+            rN();
+            sT("OKIENAK deleted.", 'info');
+        }
+        
+        // Delete OKIENAK (Admin)
+        function dAN(ownerEmail, pasteIndex) {
+            if (!confirm(`ADMIN ACTION: Delete OKIENAK from ${ownerEmail}?`)) return;
+            let u = gU();
+            if (u[ownerEmail] && u[ownerEmail].pastes[pasteIndex]) {
+                u[ownerEmail].pastes.splice(pasteIndex, 1);
+                sU(u);
+                rAN(); 
+                rN();  
+                sT(`Admin: OKIENAK from ${ownerEmail} deleted.`, 'error');
+            }
+        }
+        
+        // Syntax Highlighter & Content Render Logic (Kode dipertahankan)
+        const sHC = (content, type, applyStyle = false) => {
+            let style = '';
+            if (applyStyle) {
+                 style = `font-family: var(--c-ff); font-size: var(--c-fs); font-weight: var(--c-fw); color: var(--c-fc);`;
+            }
+            
+            if (type === 'code') {
+                return `<pre class="code-block" style="${applyStyle ? `font-size: var(--c-fs);` : ''}">${content}</pre>`;
+            }
+            
+            let processedContent = content;
+            if (type === 'link') {
+                processedContent = lk(processedContent);
+            }
+            
+            if (applyStyle) {
+                return `<p style="white-space:pre-wrap;word-wrap:break-word;word-break:break-all;line-height:1.6; ${style}">${processedContent}</p>`;
+            }
+            
+            return processedContent.replace(/\n/g, '<br>');
+        };
+        
+        // Render OKIENAKs (rN) - User's Own Notes (Telah dimodifikasi untuk menunjuk ke uN(i))
+        function rN() {
+            D.nL.innerHTML = "";
+            const e = gLUE();
+            let u = gU();
+
+            if (!u[e] || !u[e].pastes) return; 
+
+            let n = u[e].pastes;
+            const now = Date.now();
+            
+            const nonExpiredPastes = n.filter(p => !(p.expiry && p.expiry <= now));
+            u[e].pastes = nonExpiredPastes;
+            sU(u); 
+            n = u[e].pastes; 
+
+            if (n.length === 0) {
+                D.nL.innerHTML = `<div class="note-card text-center" style="border-left:8px solid #ccc; color:#888;"><h3>Start by creating your first OKIENAK.</h3></div>`;
+                return;
+            }
+
+            n.forEach((nO, i) => {
+                const isPasswordProtected = !!nO.password;
+                const statusColor = isPasswordProtected ? '#FBC02D' : 'var(--s)';
+                const statusText = isPasswordProtected ? 'LOCKED' : 'OPEN';
+                const urlPath = `${window.location.origin}${window.location.pathname}?n=${e}-${i}`; 
+                const expiryText = nO.expiry ? `EXPIRES: ${new Date(nO.expiry).toLocaleDateString()}` : 'NO EXPIRY';
+                
+                const div = document.createElement("div");
+                div.className = "note-card";
+                div.style.borderLeft = `8px solid ${statusColor}`;
+
+                div.innerHTML = `
+                    <strong style="color:var(--p);font-size:1.1rem; display:block; margin-bottom:5px; font-weight: 600;">${nO.title}</strong>
+                    <div style="margin-bottom:15px; font-size:.8rem; color:#777;">
+                        <span class="status-tag">VISITS: ${nO.visits || 0}</span>
+                        <span class="status-tag" style="background:${statusColor}; color:#fff;">STATUS: ${statusText}</span>
+                        <span class="status-tag">${expiryText}</span>
+                    </div>
+                    <div style="font-size: .9rem; max-height:80px; overflow:hidden; border-top:1px solid #ECEFF1; padding-top:15px; font-weight: 300;">
+                        ${sHC(nO.content.substring(0, 120) + (nO.content.length > 120 ? '...' : ''), nO.syntax)}
+                    </div>
+                    <div class="na">
+                        <button class="btn-edit pill-button" data-index="${i}" style="background:#3F51B5;">EDIT</button>
+                        <a href="${urlPath}" target="_blank" class="pill-button" style="background:var(--p);">SHARE LINK →</a>
+                        <button class="btn-delete pill-button" data-index="${i}" style="background:var(--e);">DELETE</button>
+                    </div>
+                `;
+                D.nL.appendChild(div);
+            });
+
+            D.nL.querySelectorAll(".btn-delete").forEach(btn => btn.addEventListener("click", e => dN(parseInt(e.target.dataset.index))));
+            D.nL.querySelectorAll(".btn-edit").forEach(btn => btn.addEventListener("click", e => uN(parseInt(e.target.dataset.index))));
+        }
+        
+        // Render OKIENAKs (rAN) - Admin Global View (Kode dipertahankan)
+        function rAN() {
+            if (gLUE() !== oE) return;
+            D.allNotesList.innerHTML = '';
+            let u = gU();
+            let totalPastes = 0;
+            
+            for (const ownerEmail in u) {
+                if (!Array.isArray(u[ownerEmail].pastes)) continue; 
+                
+                u[ownerEmail].pastes.forEach((nO, i) => {
+                    if (nO.expiry && nO.expiry <= Date.now()) return; 
+                    
+                    const isPasswordProtected = !!nO.password;
+                    const statusColor = isPasswordProtected ? '#FBC02D' : 'var(--s)';
+                    const urlPath = `${window.location.origin}${window.location.pathname}?n=${ownerEmail}-${i}`;
+                    
+                    const div = document.createElement("div");
+                    div.className = "note-card";
+                    div.style.borderLeft = `4px solid ${statusColor}`;
+                    div.innerHTML = `
+                        <div style="font-size: 0.9rem; color: #555; margin-bottom: 5px; font-weight: 500;">
+                            OWNER: <span style="color:var(--e); font-weight: 700;">${ownerEmail.split('@')[0]}</span> | VISITS: ${nO.visits || 0}
+                        </div>
+                        <strong style="color:var(--p);font-size:1.1rem; display:block; margin-bottom:5px;">${nO.title}</strong>
+                        <div style="font-size: .85rem; max-height:50px; overflow:hidden; color:#666; font-weight: 300;">
+                            ${nO.password ? '[PASSWORD PROTECTED]' : sHC(nO.content.substring(0, 80) + (nO.content.length > 80 ? '...' : ''), nO.syntax)}
+                        </div>
+                        <div class="na" style="justify-content: flex-start; margin-top: 5px;">
+                            <a href="${urlPath}" target="_blank" class="pill-button" style="background:#3F51B5;">VIEW LINK →</a>
+                            <button class="btn-delete-admin pill-button" data-owner="${ownerEmail}" data-index="${i}">DELETE</button>
+                        </div>
+                    `;
+                    D.allNotesList.appendChild(div);
+                    totalPastes++;
+                });
+            }
+            
+            D.totalNotesCount.textContent = totalPastes;
+
+            if (totalPastes === 0) {
+                 D.allNotesList.innerHTML = `<p class="text-center" style="color:#888; font-style: italic;">No active OKIENAKs found on the server.</p>`;
+            }
+
+            D.allNotesList.querySelectorAll(".btn-delete-admin").forEach(btn => {
+                btn.addEventListener("click", (e) => dAN(e.target.dataset.owner, parseInt(e.target.dataset.index)));
+            });
+        }
+
+
+        // Render Public OKIENAK (rPN) - Handler untuk link share (Kode dipertahankan)
+        function rPN(nO, ownerEmail, pasteIndex) {
+            if (!nO || !('content' in nO)) {
+                D.nC.innerHTML = `<h2 class="text-center" style="color:var(--e);">Error: Invalid OKIENAK link.</h2>`;
+                return;
+            }
+
+            const loggedInUser = gLUE();
+            const isOwner = loggedInUser === ownerEmail;
+            const isAppOwner = loggedInUser === oE; // Cek apakah yang login adalah owner (admin)
+
+            let shouldUnlock = false;
+            if (nO.password) {
+                // Admin dan Owner yang sah harus bisa langsung unlock
+                if (isAppOwner || isOwner) { 
+                    shouldUnlock = true;
+                }
+            } else {
+                shouldUnlock = true;
+            }
+
+            // Apply OKIENAK's Owner Style for Public View (Kode dipertahankan)
+            const u = gU();
+            const ownerStyle = u[ownerEmail]?.style;
+            if (ownerStyle) {
+                aCTC(ownerStyle.color);
+                document.documentElement.style.setProperty('--c-ff', ownerStyle.fontFamily);
+                document.documentElement.style.setProperty('--c-fs', `${ownerStyle.fontSize}px`);
+                document.documentElement.style.setProperty('--c-fw', ownerStyle.fontWeight);
+                document.documentElement.style.setProperty('--c-fc', ownerStyle.fontColor);
+            }
+
+            // Increment visit count only if not owner
+            if (!isOwner && !isAppOwner) { // Jangan hitung kunjungan admin/owner
+                u[ownerEmail].pastes[pasteIndex].visits = (u[ownerEmail].pastes[pasteIndex].visits || 0) + 1;
+                sU(u); 
+            }
+
+            D.nC.classList.add("hidden"); 
+            D.nC.classList.remove("main-container"); 
+            D.nC.style.maxWidth = "800px";
+            D.nC.style.padding = "30px";
+            D.nC.classList.remove("hidden");
+            D.nC.innerHTML = ''; 
+
+            if (!shouldUnlock && !!nO.password) {
+                // Locked OKIENAK View (Requires password)
+                D.nC.innerHTML = `
+                    <div class="main-container" style="max-width: 500px; margin: 50px auto;">
+                        <h2 class="text-center" style="color:var(--p); margin-bottom: 20px;">ACCESS DENIED</h2>
+                        <div class="note-card" style="border-left:8px solid var(--e); margin-top:10px;">
+                            <p class="text-center" style="color:#777; margin-bottom: 15px; font-weight: 300;">This OKIENAK is protected by password.</p>
+                            <p class="text-center">Title: <strong>${nO.title}</strong></p>
+                            <div style="position:relative; margin-top:20px;">
+                                <input type="password" id="sP" placeholder="Enter Password" style="padding-right: 6rem; margin-bottom:0;">
+                                <span class="password-toggle" id="sPTog">SHOW</span>
+                            </div>
+                            <button id="uB" class="pill-button" style="margin-top:25px; width:100%;">UNLOCK CONTENT</button>
+                        </div>
+                        <button id="cNR" class="pill-button" style="margin-top:25px; background: #9E9E9E;">CREATE YOUR OWN</button>
+                    </div>
+                `;
+                
+                const sPTog = document.getElementById('sPTog');
+                const sP = document.getElementById('sP');
+                const uB = document.getElementById('uB');
+                const cNR = document.getElementById('cNR');
+
+                if (sPTog && sP) sPTog.addEventListener('click', () => tPV(sP, sPTog));
+                if (uB) uB.addEventListener('click', () => {
+                    const eP = sP.value.trim();
+                    if (eP === nO.password) rC(nO);
+                    else sT("Incorrect password!", 'error');
+                });
+                if (cNR) cNR.addEventListener('click', () => window.location.href = window.location.origin + window.location.pathname);
+
+
+            } else {
+                // Unlocked or Regular OKIENAK View
+                rC(nO);
+            }
+        }
+        
+        // Render Content for Shared/Public View (rC) (Kode dipertahankan)
+        function rC(nO) {
+            D.nC.classList.add("main-container"); 
+            D.nC.innerHTML = `
+                <h1 class="text-center" style="font-size: 2.2rem; color: var(--t); font-weight: 600;">${nO.title}</h1>
+                <div class="note-card" style="margin-top:30px; width:100%; border-left: 8px solid var(--p);">
+                    <div style="font-size: var(--c-fs); font-weight: var(--c-fw); color: var(--c-fc);">
+                        ${sHC(nO.content, nO.syntax, true)}
+                    </div>
+                </div>
+                <div class="text-center" style="font-size:.9rem;color:#9575CD; margin-top:15px; font-weight: 500;">
+                    <p>TYPE: ${nO.syntax.toUpperCase()} | VISITED: ${nO.visits || 0} TIMES</p>
+                </div>
+                <button id="cNR" class="pill-button" style="margin-top:30px; background: #9E9E9E;">CREATE YOUR OWN OKIENAK</button>
+            `;
+            document.getElementById('cNR').addEventListener('click', () => window.location.href = window.location.origin + window.location.pathname);
+        }
+
+        // --- INITIALIZATION ---
+        window.addEventListener("load", () => {
+            try {
+                // 1. Inisiasi Akun Owner 
+                let u = gU();
+                const defaultOwnerEmail = oE;
+                const defaultOwnerPass = "ipulapik999#";
+                
+                if (!u[defaultOwnerEmail]) {
+                     u[defaultOwnerEmail] = {
+                        password: defaultOwnerPass, 
+                        pastes: [], 
+                        style: {
+                            color: "#673AB7", 
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "16",
+                            fontWeight: "400",
+                            fontColor: "#4527A0"
+                        },
+                        visits: 0 
+                    };
+                    sU(u);
+                    sT(`Owner account created: ${defaultOwnerEmail} / ${defaultOwnerPass}`, 'success');
+                }
+
+                const l = gLUE();
+                const p = new URLSearchParams(window.location.search);
+                const nP = p.get("n"); 
+
+                // 2. Handle Shared OKIENAK Link
+                if (nP) {
+                    let targetOKIENAK = null;
+                    let ownerEmail = null;
+                    let pasteIndex = -1;
+                    
+                    const [e, i] = nP.split("-");
+                    if (u[e] && u[e].pastes && u[e].pastes[i]) {
+                        targetOKIENAK = u[e].pastes[i];
+                        ownerEmail = e;
+                        pasteIndex = parseInt(i);
+                    }
+
+                    if (targetOKIENAK) {
+                        if (targetOKIENAK.expiry && targetOKIENAK.expiry <= Date.now()) {
+                            sT("Error: OKIENAK has expired!", 'error');
+                            sHP(); 
+                            return;
+                        }
+                        
+                        D.hC.classList.add("hidden");
+                        D.aC.classList.add("hidden");
+                        
+                        rPN(targetOKIENAK, ownerEmail, pasteIndex);
+                        return;
+                    } else {
+                        sT("Error: Invalid or deleted OKIENAK link.", 'error');
+                        sHP();
+                        return;
+                    }
+                }
+
+                // 3. Handle Regular Access (Login Check)
+                if (l) {
+                    sNP(l);
+                } else {
+                    sHP(); 
+                }
+            } catch (error) {
+                console.error("Initialization Error:", error);
+                sT("Critical Error: Cannot load website. Please clear browser storage.", 'error');
+                sHP(); 
+            }
+        });
+    </script>
+</body>
+</html>
